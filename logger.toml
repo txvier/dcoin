@@ -1,0 +1,25 @@
+
+level = "debug"
+formatter.name = "text"
+
+[out]
+#    name = "rotatelogs"
+    name = "stdout"
+    [out.options]
+        link-name = "/Users/xhtian/wks/src/github.com/txvier/dcoin/mate.log"
+        max-age= "168h"
+        rotation-time = "1m"
+        clock=""
+        rotation-count=0
+
+
+[[hooks]]
+    name = "file"
+    [hooks.options]
+          filename = "./en.log"
+#          maxlines = 10
+#          maxsize= 200
+#          maxdays= 1
+#          daily = true
+#          rotate= true
+          level= "debug"
