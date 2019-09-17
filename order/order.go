@@ -33,7 +33,7 @@ func place(p models.PlaceRequestParams) (r models.PlaceReturn) {
 // 限价买入
 // 在当前最低价格下方挂买单（低价买入）
 func PlaceBuyLimit(p models.PlaceParams) (r models.PlaceReturn) {
-	p.Type = "bug-limit"
+	p.Type = "buy-limit"
 	prp := models.PlaceRequestParams{
 		PlaceParams: p,
 	}
@@ -43,7 +43,7 @@ func PlaceBuyLimit(p models.PlaceParams) (r models.PlaceReturn) {
 // 限价买入-maker
 // 在当前最低价格下方挂买单（低价买入）
 func PlaceBuyLimitMaker(p models.PlaceParams) (r models.PlaceReturn) {
-	p.Type = "bug-limit-maker"
+	p.Type = "buy-limit-maker"
 	prp := models.PlaceRequestParams{
 		PlaceParams: p,
 	}
@@ -54,7 +54,7 @@ func PlaceBuyLimitMaker(p models.PlaceParams) (r models.PlaceReturn) {
 
 // 在当前最高价格上方挂买单（高价买入）
 func PlaceBuyStopLimit(p models.PlaceParams) (r models.PlaceReturn) {
-	p.Type = "bug-stop-limit"
+	p.Type = "buy-stop-limit"
 	p.Operator = "gte"
 	prp := models.PlaceRequestParams{
 		PlaceParams: p,

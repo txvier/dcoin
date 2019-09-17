@@ -5,7 +5,6 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
-	"github.com/txvier/dcoin/base"
 	"os"
 )
 
@@ -27,7 +26,7 @@ func GetProfile() string {
 }
 
 func init() {
-
+	var viper = viper.New()
 	if CFG_FILE != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(CFG_FILE)
@@ -50,12 +49,12 @@ func init() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println()
 		fmt.Println("Config file changed:", e.Name)
-		base.PrintDcoinPrefix()
+		fmt.Print("dcoin> ")
 	})
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-		C = viper.GetViper()
+		C = viper
 	}
 }

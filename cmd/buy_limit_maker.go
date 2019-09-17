@@ -23,28 +23,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// buylimitCmd represents the buylimit command
-var buylimitCmd = &cobra.Command{
-	Use:   "bl",
-	Short: "PlaceBuyLimit",
-	Long:  "PlaceBuyLimit",
+// placebuylimitmakerCmd represents the placebuylimitmaker command
+var placebuylimitmakerCmd = &cobra.Command{
+	Use:   "blm",
+	Short: "PlaceBuyLimitMaker",
+	Long:  "PlaceBuyLimitMaker",
 	Run: func(cmd *cobra.Command, args []string) {
 		var p models.PlaceParams
 		config.C.UnmarshalKey("order", &p)
-		order.PlaceBuyLimit(p)
+		order.PlaceBuyLimitMaker(p)
 	},
 }
 
 func init() {
-	orderCmd.AddCommand(buylimitCmd)
+	orderCmd.AddCommand(placebuylimitmakerCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// buylimitCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// placebuylimitmakerCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// buylimitCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// placebuylimitmakerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
