@@ -16,7 +16,9 @@ limitations under the License.
 package cmd
 
 import (
-	//log "github.com/sirupsen/logrus"
+	"fmt"
+	"github.com/sirupsen/logrus"
+	"github.com/txvier/dcoin/base"
 	"github.com/txvier/dcoin/config"
 	"github.com/txvier/dcoin/models"
 	"github.com/txvier/dcoin/order"
@@ -26,18 +28,19 @@ import (
 
 // buylimitCmd represents the buylimit command
 var buylimitCmd = &cobra.Command{
-	Use:   "buylimit",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "bl",
+	Short: "PlaceBuyLimit",
+	Long:  "PlaceBuyLimit",
 	Run: func(cmd *cobra.Command, args []string) {
 		var p models.PlaceParams
 		config.C.UnmarshalKey("order", &p)
-		order.PlaceBuyLimit(p)
+		r := order.PlaceBuyLimit(p)
+		if r.Status != "ok" {
+			logrus.Error(r.ErrMsg)
+			fmt.Println("placeBuyLimit error:%s", r.ErrMsg)
+			base.PrintDcoinPrefix()
+		}
+		//fmt.Println("haha")
 	},
 }
 

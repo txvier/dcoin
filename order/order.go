@@ -51,6 +51,7 @@ func PlaceBuyLimitMaker(p models.PlaceParams) (r models.PlaceReturn) {
 }
 
 // 限价买入
+
 // 在当前最高价格上方挂买单（高价买入）
 func PlaceBuyStopLimit(p models.PlaceParams) (r models.PlaceReturn) {
 	p.Type = "bug-stop-limit"

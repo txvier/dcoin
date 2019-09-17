@@ -5,6 +5,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"github.com/txvier/dcoin/base"
 	"os"
 )
 
@@ -49,7 +50,7 @@ func init() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println()
 		fmt.Println("Config file changed:", e.Name)
-		fmt.Print("dcoin> ")
+		base.PrintDcoinPrefix()
 	})
 
 	// If a config file is found, read it in.

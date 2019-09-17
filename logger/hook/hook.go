@@ -1,43 +1,25 @@
 package hook
 
 import (
-	"bytes"
 	"fmt"
-	"os"
-	"os/exec"
-	"strings"
-
 	"github.com/heralight/logrus_mate"
 	"github.com/sirupsen/logrus"
-
-	"github.com/heralight/logrus_mate/hooks/utils/caller"
+	"os"
 )
 
 func init() {
-	fmt.Println("haha")
 	logrus_mate.RegisterHook("file", NewFileHook)
 }
 
 func NewFileHook(options logrus_mate.Options) (hook logrus.Hook, err error) {
 
-	conf := FileLogConifg{}
+	conf := FileLogConfig{}
 
 	if err = options.ToObject(&conf); err != nil {
 		return
 	}
+	w := NewFileWriter(&conf)
 
-	path := strings.Split(conf.Filename, "/")
-	if len(path) > 1 {
-		exec.Command("mkdir", path[0]).Run()
-	}
-
-	w := NewFileWriter()
-
-	//if err = w.Init(conf); err != nil {
-	//	return
-	//}
-
-	//w.SetPrefix("[-] ")
 	hook = &FileHook{W: w}
 
 	return
@@ -48,8 +30,6 @@ type FileHook struct {
 }
 
 func (p *FileHook) Fire(entry *logrus.Entry) (err error) {
-
-	//message, err := getMessage(entry)
 	message, err := entry.String()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to read entry, %v", err)
@@ -84,41 +64,4 @@ func (p *FileHook) Levels() []logrus.Level {
 		logrus.InfoLevel,
 		logrus.DebugLevel,
 	}
-}
-
-func getMessage(entry *logrus.Entry) (message string, err error) {
-	message = message + fmt.Sprintf("%s\n", entry.Message)
-	for k, v := range entry.Data {
-		if !strings.HasPrefix(k, "err_") {
-			message = message + fmt.Sprintf("%v:%v\n", k, v)
-		}
-	}
-	if errCode, exist := entry.Data["err_code"]; exist {
-
-		ns, _ := entry.Data["err_ns"]
-		ctx, _ := entry.Data["err_ctx"]
-		id, _ := entry.Data["err_id"]
-		tSt, _ := entry.Data["err_stack"]
-		st, _ := tSt.(string)
-		st = strings.Replace(st, "\n", "\n\t\t", -1)
-
-		buf := bytes.NewBuffer(nil)
-		buf.WriteString(fmt.Sprintf("\tid:\n\t\t%s#%d:%s\n", ns, errCode, id))
-		buf.WriteString(fmt.Sprintf("\tcontext:\n\t\t%s\n", ctx))
-		buf.WriteString(fmt.Sprintf("\tstacktrace:\n\t\t%s", st))
-
-		message = message + fmt.Sprintf("%v", buf.String())
-	} else {
-		file, lineNumber := caller.GetCallerIgnoringLogMulti(2)
-		if file != "" {
-			sep := fmt.Sprintf("%s/src/", os.Getenv("GOPATH"))
-			fileName := strings.Split(file, sep)
-			if len(fileName) >= 2 {
-				file = fileName[1]
-			}
-		}
-		message = message + fmt.Sprintf("%s:%d", file, lineNumber)
-	}
-
-	return
 }

@@ -3,6 +3,7 @@ package base
 import (
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/txvier/dcoin/big"
 	"github.com/txvier/dcoin/services"
 	"strings"
@@ -33,12 +34,14 @@ var GetAccountsHuobi FuncGetAccounts = func() (m map[string]Account, err error) 
 	if ar.Status != "ok" {
 		return m, errors.New("get accounts error...")
 	}
+	logrus.Info("load accounts ok...")
 	var aid string
 	for _, d := range ar.Data {
 		if d.Type == "spot" && d.State == "working" {
 			aid = fmt.Sprint(d.ID)
 		}
 	}
+	logrus.Infof("account spot aid is:[%s]\n", aid)
 	br := services.GetAccountBalance(aid)
 	if br.Status != "ok" {
 		return m, errors.New("get accounts error...")
@@ -55,6 +58,7 @@ var GetAccountsHuobi FuncGetAccounts = func() (m map[string]Account, err error) 
 					Balance:  big.NewFromString(l.Balance),
 				}
 			}
+			logrus.Info("trade account balance is zero...\n")
 		}
 	}
 	return

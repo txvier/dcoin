@@ -77,10 +77,9 @@ func init() {
 	logrus.SetReportCaller(true)
 
 	// Read configuration
-	mate.RegisterWriter("rotatelogs", NewRotatelogsWriter)
+	//mate.RegisterWriter("rotatelogs", NewRotatelogsWriter)
 	var c = logrusHelper.UnmarshalConfiguration(viper) // Unmarshal configuration from Viper
 	logrusHelper.SetConfig(logrus.StandardLogger(), c) // for e.g. apply it to logrus default instance
-	logrus.Println("enheng")
 	// ### End Read Configuration
 
 }

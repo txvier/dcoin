@@ -19,6 +19,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"github.com/txvier/dcoin/base"
 	"github.com/txvier/dcoin/cmd"
 	_ "github.com/txvier/dcoin/logger"
 	"os"
@@ -27,7 +28,7 @@ import (
 )
 
 func AcceptDo(chs chan os.Signal) {
-	fmt.Print("dcoin> ")
+	base.PrintDcoinPrefix()
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -38,7 +39,7 @@ func AcceptDo(chs chan os.Signal) {
 			go func(line string) {
 				args := strings.Split(line, " ")
 				cmd.Execute(args)
-				fmt.Print("dcoin> ")
+				base.PrintDcoinPrefix()
 			}(line)
 		}
 	}
@@ -48,9 +49,8 @@ func AcceptDo(chs chan os.Signal) {
 }
 
 func main() {
-	for i:=0;i<10;i++ {
-		logrus.Error("the service start...")
-
+	for i := 0; i < 10; i++ {
+		logrus.Info("the service start...")
 	}
 	chs := make(chan os.Signal)
 	signal.Notify(chs, os.Interrupt, os.Kill)
